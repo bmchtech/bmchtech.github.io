@@ -233,7 +233,7 @@ feed them into 4 of the 6 inputs of this CSA array, and when we have our 2 resul
 CSA array with `0`s. 
 
 <a name="trick"> </a>
-A clever trick can be done here. The ARM7TDMI [supports mutliply accumulates](#instructions), which perform multiplication and addition in one instruction. We can implement multiply accumulate by initializing one
+A clever trick can be done here. The ARM7TDMI [supports multiply accumulates](#instructions), which perform multiplication and addition in one instruction. We can implement multiply accumulate by initializing one
 of those two inputs with the accumulate value, and get multiply accumulate without extra cycles. This trick is what the
 ARM7TDMI employs to do multiply accumulate. (This ends up being a moot point, because the CPU is stupid and can only read two register values at a time per cycle. So, using an accumulate causes the CPU to take
 an extra cycle _anyway_). <sup>[[4, p.95](#cite4)]</sup>
@@ -569,7 +569,7 @@ u128 partial_sum;
 u128 partial_carry;
 
 do {
-    csa_output = perform_one_cycle_of_booths_mutliplication(
+    csa_output = perform_one_cycle_of_booths_multiplication(
         csa_output, multiplicand, multiplier);
 
     // The bottom 8 bits of this cycle cannot be changed by future
