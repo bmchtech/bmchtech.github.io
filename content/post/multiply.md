@@ -38,12 +38,12 @@ emulate at all. Software doesn't rely on it. And if software _did_ rely on it, t
 that was motivation enough for me to give it a go. Little did I know it'd take _3 years_ of on and off work.
 
 # Standard Algorithm
-What's the simplest, most basic multiplication algorithm you can think of to multiply a <span style="color:#3a7dc9"> **multiplier**</span> with a <span style="color:#DC6A76"> **multiplicand**</span>? One really easy way is to
+What's the simplest, most basic multiplication algorithm you can think of to multiply a <span style="color:#468ee0"> **multiplier**</span> with a <span style="color:#e23e4b"> **multiplicand**</span>? One really easy way is to
 leverage the distributive property of multiplication like so:
 
 $$
-\color{#3a7dc9}123\color{#4A4358}  \cdot  \color{#DC6A76}4 \color{#4A4358}=
-\color{#3a7dc9}{100 \color{#4A4358} \cdot  \color{#DC6A76}4} \color{#4A4358} + \color{#3a7dc9}{20 \color{#4A4358} \cdot  \color{#DC6A76}4} \color{#4A4358} + \color{#3a7dc9}{3 \color{#4A4358} \cdot  \color{#DC6A76}4}
+\color{#468ee0}123\color{#b6abcb}  \cdot  \color{#e23e4b}4 \color{#b6abcb}=
+\color{#468ee0}{100 \color{#b6abcb} \cdot  \color{#e23e4b}4} \color{#b6abcb} + \color{#468ee0}{20 \color{#b6abcb} \cdot  \color{#e23e4b}4} \color{#b6abcb} + \color{#468ee0}{3 \color{#b6abcb} \cdot  \color{#e23e4b}4}
 $$
 
 There's two steps here - first compute the addends, then sum them. This
@@ -51,11 +51,11 @@ is the basic two-step process you'll find in lots of multiplication algorithms -
 how they compute the addends, or how they add the addends together. We can generalize this algorithm
 to binary pretty easily too:
 $$
-\color{#3a7dc9}1101 \color{#4A4358} \cdot \color{#DC6A76}11\color{#4A4358} =
-\color{#3a7dc9}{1000 \color{#4A4358} \cdot\color{#DC6A76} 11} \color{#4A4358} + \color{#3a7dc9}{100 \color{#4A4358} \cdot \color{#DC6A76} 11} \color{#4A4358} + \color{#3a7dc9}{0 \color{#4A4358} \cdot\color{#DC6A76} 11} \color{#4A4358} + \color{#3a7dc9}{1 \color{#4A4358} \cdot \color{#DC6A76}11}
+\color{#468ee0}1101 \color{#b6abcb} \cdot \color{#e23e4b}11\color{#b6abcb} =
+\color{#468ee0}{1000 \color{#b6abcb} \cdot\color{#e23e4b} 11} \color{#b6abcb} + \color{#468ee0}{100 \color{#b6abcb} \cdot \color{#e23e4b} 11} \color{#b6abcb} + \color{#468ee0}{0 \color{#b6abcb} \cdot\color{#e23e4b} 11} \color{#b6abcb} + \color{#468ee0}{1 \color{#b6abcb} \cdot \color{#e23e4b}11}
 $$
 The convenient thing about binary is that it's all ones and zeros, meaning the addends are only ever `0`, or
-the <span style="color:#DC6A76"> **multiplicand**</span> left shifted by some factor. This makes the addends easy to compute, and means that for
+the <span style="color:#e23e4b"> **multiplicand**</span> left shifted by some factor. This makes the addends easy to compute, and means that for
 an `N-bit` number, we need to produce `N` different addends, and add them all up to get the result.
 That's a lot of addends, which is slow. We can do better.
 
@@ -64,30 +64,30 @@ The main slowness of the Standard Algorithm is that it requires you to add a  _l
 Modified Booth's algorithm is an improvement on the Standard Algorithm that cuts the number of addends in two. Let's start with the standard definition for multiplication, written as a summation. Note that `m[i]` is defined as the bit at index `i` of `m` when `0 <= i < n`.
 $$
 \begin{aligned}
-\color{#3a7dc9}{m}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} &= \sum_{i=0}^{n-1} (2^i \cdot \color{#3a7dc9}{m[i]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) \cr
+\color{#468ee0}{m}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} &= \sum_{i=0}^{n-1} (2^i \cdot \color{#468ee0}{m[i]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) \cr
 \end{aligned}
 $$
 
 Now we apply the following transformations. Yes I know this looks scary, you could skip to [the final equation](#finaleq) if you want.
 $$
 \begin{align}
-\color{#3a7dc9}{m}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} &= \sum_{i=0}^{n-1} (2^i \cdot \color{#3a7dc9}{m[i]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} )\cr\cr
+\color{#468ee0}{m}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} &= \sum_{i=0}^{n-1} (2^i \cdot \color{#468ee0}{m[i]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} )\cr\cr
    &\quad\text{Separate the summation into even and odd elements:}\cr \cr
-\color{#3a7dc9}{m}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} &= \sum_{i=0}^{\frac{n}{2}-1} (2^{2i} \cdot \color{#3a7dc9}{m[2i]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) + \sum_{i=0}^{\frac{n}{2}-1}  (2^{2i + 1} \cdot \color{#3a7dc9}{m[2i + 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) \cr
+\color{#468ee0}{m}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} &= \sum_{i=0}^{\frac{n}{2}-1} (2^{2i} \cdot \color{#468ee0}{m[2i]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) + \sum_{i=0}^{\frac{n}{2}-1}  (2^{2i + 1} \cdot \color{#468ee0}{m[2i + 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) \cr
 \cr&     \quad\text{                        Split the second summation into two more summations:}\cr \cr
-\color{#3a7dc9}{m}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} &= \sum_{i=0}^{\frac{n}{2}-1} (2^{2i} \cdot \color{#3a7dc9}{m[2i]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) + (2 - 1) \cdot \sum_{i=0}^{\frac{n}{2}-1}  (2^{2i + 1} \cdot \color{#3a7dc9}{m[2i + 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) \cr 
-\color{#3a7dc9}{m}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} &= \sum_{i=0}^{\frac{n}{2}-1} (2^{2i} \cdot \color{#3a7dc9}{m[2i]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) + 2 \sum_{i=0}^{\frac{n}{2}-1}  (2^{2i + 1} \cdot \color{#3a7dc9}{m[2i + 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) - \sum_{i=0}^{\frac{n}{2}-1}  (2^{2i + 1} \cdot \color{#3a7dc9}{m[2i + 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) \cr
-\color{#3a7dc9}{m}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} &= \sum_{i=0}^{\frac{n}{2}-1} (2^{2i} \cdot \color{#3a7dc9}{m[2i]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) + \sum_{i=0}^{\frac{n}{2}-1}  (2^{2i + 2} \cdot \color{#3a7dc9}{m[2i + 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) - \sum_{i=0}^{\frac{n}{2}-1}  (2^{2i + 1} \cdot \color{#3a7dc9}{m[2i + 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) \cr \cr&     \quad\text{                        Pull out a single element from each summation, one at a time:}\cr \cr
-\color{#3a7dc9}{m}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} &= \sum_{i=1}^{\frac{n}{2}-1} (2^{2i} \cdot \color{#3a7dc9}{m[2i]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) + \sum_{i=0}^{\frac{n}{2}-1}  (2^{2i + 2} \cdot \color{#3a7dc9}{m[2i + 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) - \sum_{i=0}^{\frac{n}{2}-1}  (2^{2i + 1} \cdot \color{#3a7dc9}{m[2i + 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) + (\color{#3a7dc9}{m[0]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358})\cr
-\color{#3a7dc9}{m}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} &= \sum_{i=1}^{\frac{n}{2}-1} (2^{2i} \cdot \color{#3a7dc9}{m[2i]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) + \sum_{i=0}^{\frac{n}{2}-2}  (2^{2i + 2} \cdot \color{#3a7dc9}{m[2i + 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) - \sum_{i=0}^{\frac{n}{2}-1}  (2^{2i + 1} \cdot \color{#3a7dc9}{m[2i + 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) + (\color{#3a7dc9}{m[0]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} + 2^{n} \cdot \color{#3a7dc9}{m[n - 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} )\cr
-\color{#3a7dc9}{m}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} &= \sum_{i=1}^{\frac{n}{2}-1} (2^{2i} \cdot \color{#3a7dc9}{m[2i]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) + \sum_{i=0}^{\frac{n}{2}-2}  (2^{2i + 2} \cdot \color{#3a7dc9}{m[2i + 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) - \sum_{i=1}^{\frac{n}{2}-1}  (2^{2i + 1} \cdot \color{#3a7dc9}{m[2i + 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) + (\color{#3a7dc9}{m[0]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} + 2^{n} \cdot \color{#3a7dc9}{m[n - 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}  + 2 \cdot \color{#3a7dc9}{m[1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} )\cr
+\color{#468ee0}{m}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} &= \sum_{i=0}^{\frac{n}{2}-1} (2^{2i} \cdot \color{#468ee0}{m[2i]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) + (2 - 1) \cdot \sum_{i=0}^{\frac{n}{2}-1}  (2^{2i + 1} \cdot \color{#468ee0}{m[2i + 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) \cr 
+\color{#468ee0}{m}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} &= \sum_{i=0}^{\frac{n}{2}-1} (2^{2i} \cdot \color{#468ee0}{m[2i]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) + 2 \sum_{i=0}^{\frac{n}{2}-1}  (2^{2i + 1} \cdot \color{#468ee0}{m[2i + 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) - \sum_{i=0}^{\frac{n}{2}-1}  (2^{2i + 1} \cdot \color{#468ee0}{m[2i + 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) \cr
+\color{#468ee0}{m}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} &= \sum_{i=0}^{\frac{n}{2}-1} (2^{2i} \cdot \color{#468ee0}{m[2i]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) + \sum_{i=0}^{\frac{n}{2}-1}  (2^{2i + 2} \cdot \color{#468ee0}{m[2i + 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) - \sum_{i=0}^{\frac{n}{2}-1}  (2^{2i + 1} \cdot \color{#468ee0}{m[2i + 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) \cr \cr&     \quad\text{                        Pull out a single element from each summation, one at a time:}\cr \cr
+\color{#468ee0}{m}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} &= \sum_{i=1}^{\frac{n}{2}-1} (2^{2i} \cdot \color{#468ee0}{m[2i]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) + \sum_{i=0}^{\frac{n}{2}-1}  (2^{2i + 2} \cdot \color{#468ee0}{m[2i + 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) - \sum_{i=0}^{\frac{n}{2}-1}  (2^{2i + 1} \cdot \color{#468ee0}{m[2i + 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) + (\color{#468ee0}{m[0]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb})\cr
+\color{#468ee0}{m}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} &= \sum_{i=1}^{\frac{n}{2}-1} (2^{2i} \cdot \color{#468ee0}{m[2i]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) + \sum_{i=0}^{\frac{n}{2}-2}  (2^{2i + 2} \cdot \color{#468ee0}{m[2i + 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) - \sum_{i=0}^{\frac{n}{2}-1}  (2^{2i + 1} \cdot \color{#468ee0}{m[2i + 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) + (\color{#468ee0}{m[0]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} + 2^{n} \cdot \color{#468ee0}{m[n - 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} )\cr
+\color{#468ee0}{m}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} &= \sum_{i=1}^{\frac{n}{2}-1} (2^{2i} \cdot \color{#468ee0}{m[2i]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) + \sum_{i=0}^{\frac{n}{2}-2}  (2^{2i + 2} \cdot \color{#468ee0}{m[2i + 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) - \sum_{i=1}^{\frac{n}{2}-1}  (2^{2i + 1} \cdot \color{#468ee0}{m[2i + 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) + (\color{#468ee0}{m[0]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} + 2^{n} \cdot \color{#468ee0}{m[n - 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}  + 2 \cdot \color{#468ee0}{m[1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} )\cr
 \cr&     \quad\text{                        Manipulate the range of the second summation to match the ranges of the other two:}\cr \cr
-\color{#3a7dc9}{m}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} &= \sum_{i=1}^{\frac{n}{2}-1} (2^{2i} \cdot \color{#3a7dc9}{m[2i]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) + \sum_{i=1}^{\frac{n}{2}-1}  (2^{2i} \cdot \color{#3a7dc9}{m[2i - 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) - \sum_{i=1}^{\frac{n}{2}-1}  (2^{2i + 1} \cdot \color{#3a7dc9}{m[2i + 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) + (\color{#3a7dc9}{m[0]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} + 2^{n} \cdot \color{#3a7dc9}{m[n - 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}  + 2 \cdot \color{#3a7dc9}{m[1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} )\cr
+\color{#468ee0}{m}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} &= \sum_{i=1}^{\frac{n}{2}-1} (2^{2i} \cdot \color{#468ee0}{m[2i]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) + \sum_{i=1}^{\frac{n}{2}-1}  (2^{2i} \cdot \color{#468ee0}{m[2i - 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) - \sum_{i=1}^{\frac{n}{2}-1}  (2^{2i + 1} \cdot \color{#468ee0}{m[2i + 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) + (\color{#468ee0}{m[0]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} + 2^{n} \cdot \color{#468ee0}{m[n - 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}  + 2 \cdot \color{#468ee0}{m[1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} )\cr
 \cr&     \quad\text{                        So that we can combine the summations now:}\cr \cr
-\color{#3a7dc9}{m}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} &= \sum_{i=1}^{\frac{n}{2}-1} (2^{2i} \cdot \color{#3a7dc9}{m[2i]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} + 2^{2i} \cdot \color{#3a7dc9}{m[2i - 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} - 2^{2i + 1} \cdot \color{#3a7dc9}{m[2i + 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) + (\color{#3a7dc9}{m[0]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} + 2^{n} \cdot \color{#3a7dc9}{m[n - 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}  + 2 \cdot \color{#3a7dc9}{m[1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} )\cr
+\color{#468ee0}{m}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} &= \sum_{i=1}^{\frac{n}{2}-1} (2^{2i} \cdot \color{#468ee0}{m[2i]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} + 2^{2i} \cdot \color{#468ee0}{m[2i - 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} - 2^{2i + 1} \cdot \color{#468ee0}{m[2i + 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) + (\color{#468ee0}{m[0]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} + 2^{n} \cdot \color{#468ee0}{m[n - 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}  + 2 \cdot \color{#468ee0}{m[1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} )\cr
 \cr&     \quad\text{                       Some tidywork...}\cr \cr
-\color{#3a7dc9}{m}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} &= \sum_{i=1}^{\frac{n}{2}-1} (2^{2i} \cdot \color{#3a7dc9}{m[2i]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} + 2^{2i} \cdot \color{#3a7dc9}{m[2i - 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} - 2 \cdot 2^{2i} \cdot \color{#3a7dc9}{m[2i + 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}) + (\color{#3a7dc9}{m[0]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} + 2^{n} \cdot \color{#3a7dc9}{m[n - 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}  + 2 \cdot \color{#3a7dc9}{m[1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} )\cr
-\color{#3a7dc9}{m}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} &= \sum_{i=1}^{\frac{n}{2}-1} ((2^{2i} \cdot \color{#DC6A76} \alpha \color{#4A4358} )\cdot(\color{#3a7dc9}{m[2i]}\color{#4A4358} + \color{#3a7dc9}{m[2i - 1]}\color{#4A4358} - 2 \cdot \color{#3a7dc9}{m[2i + 1]}\color{#4A4358} )) + (\color{#3a7dc9}{m[0]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} + 2^{n} \cdot \color{#3a7dc9}{m[n - 1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358}  + 2 \cdot \color{#3a7dc9}{m[1]}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} )\cr
+\color{#468ee0}{m}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} &= \sum_{i=1}^{\frac{n}{2}-1} (2^{2i} \cdot \color{#468ee0}{m[2i]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} + 2^{2i} \cdot \color{#468ee0}{m[2i - 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} - 2 \cdot 2^{2i} \cdot \color{#468ee0}{m[2i + 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) + (\color{#468ee0}{m[0]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} + 2^{n} \cdot \color{#468ee0}{m[n - 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}  + 2 \cdot \color{#468ee0}{m[1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} )\cr
+\color{#468ee0}{m}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} &= \sum_{i=1}^{\frac{n}{2}-1} ((2^{2i} \cdot \color{#e23e4b} \alpha \color{#b6abcb} )\cdot(\color{#468ee0}{m[2i]}\color{#b6abcb} + \color{#468ee0}{m[2i - 1]}\color{#b6abcb} - 2 \cdot \color{#468ee0}{m[2i + 1]}\color{#b6abcb} )) + (\color{#468ee0}{m[0]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} + 2^{n} \cdot \color{#468ee0}{m[n - 1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb}  + 2 \cdot \color{#468ee0}{m[1]}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} )\cr
 \end{align}
 $$
 
@@ -95,7 +95,7 @@ Whew. Did you get all of that? Why did we do all this? Well, note this part of t
 
 $$
 \begin{aligned}
-(\color{#3a7dc9}{m[2i]}\color{#4A4358} + \color{#3a7dc9}{m[2i - 1]}\color{#4A4358} - 2 \cdot \color{#3a7dc9}{m[2i + 1]}\color{#4A4358})
+(\color{#468ee0}{m[2i]}\color{#b6abcb} + \color{#468ee0}{m[2i - 1]}\color{#b6abcb} - 2 \cdot \color{#468ee0}{m[2i + 1]}\color{#b6abcb})
 \end{aligned}
 $$
 
@@ -107,7 +107,7 @@ Multiplication by those five numbers is easy to calculate in hardware (well, neg
 Note also that if we define:
 
 $$
-\color{#3a7dc9}{m[-1]}\color{#4A4358} = 0
+\color{#468ee0}{m[-1]}\color{#b6abcb} = 0
 $$
 
 and
@@ -115,9 +115,9 @@ and
 $$
 \begin{aligned}
 \text{For}&\text{ unsigned multiplication:}\cr\cr
-&x \geq n:  \color{#3a7dc9}{m[x]}\color{#4A4358} = 0\cr\cr
+&x \geq n:  \color{#468ee0}{m[x]}\color{#b6abcb} = 0\cr\cr
 \text{For}&\text{ signed multiplication:}\cr\cr
-&x \geq n: \color{#3a7dc9}{m[x]}\color{#4A4358} = \color{#3a7dc9}m[n-1]\cr\cr
+&x \geq n: \color{#468ee0}{m[x]}\color{#b6abcb} = \color{#468ee0}m[n-1]\cr\cr
 \end{aligned}
 $$
 
@@ -128,7 +128,7 @@ Then the leftover three terms outside the summation can be absorbed into the sum
 
 $$
 \begin{aligned}
-\color{#3a7dc9}{m}\color{#4A4358} \cdot \color{#DC6A76} \alpha \color{#4A4358} &= \sum_{i=0}^{\frac{n}{2}} ((2^{2i} \cdot \color{#DC6A76} \alpha \color{#4A4358}) \cdot (\color{#3a7dc9}{m[2i]}\color{#4A4358} + \color{#3a7dc9}{m[2i - 1]}\color{#4A4358} - 2 \cdot \color{#3a7dc9}{m[2i + 1]}\color{#4A4358}))\cr
+\color{#468ee0}{m}\color{#b6abcb} \cdot \color{#e23e4b} \alpha \color{#b6abcb} &= \sum_{i=0}^{\frac{n}{2}} ((2^{2i} \cdot \color{#e23e4b} \alpha \color{#b6abcb}) \cdot (\color{#468ee0}{m[2i]}\color{#b6abcb} + \color{#468ee0}{m[2i - 1]}\color{#b6abcb} - 2 \cdot \color{#468ee0}{m[2i + 1]}\color{#b6abcb}))\cr
 \end{aligned}
 $$
 
@@ -227,7 +227,7 @@ them using four CSAs to generates only two addends.
 
 </center>
 
- Each cycle, we read 8 bits from the <span style="color:#3a7dc9"> **multiplier**</span>, and with it, we generate 4 addends. We then
+ Each cycle, we read 8 bits from the <span style="color:#468ee0"> **multiplier**</span>, and with it, we generate 4 addends. We then
 feed them into 4 of the 6 inputs of this CSA array, and when we have our 2 results, feed those
 2 results back to the very top of the CSA array for the next cycle. On the first cycle of the algorithm, we can initialize those 2 inputs to the
 CSA array with `0`s. 
@@ -241,7 +241,7 @@ an extra cycle _anyway_). <sup>[[4, p.95](#cite4)]</sup>
 
 # Early Termination
 The ARM7TDMI does something really clever here. In our current model of the algorithm, there are 4
-cycles of CSA compression, where each cycle `i` processes bits `8 * i` to `8 * i + 7` of the <span style="color:#3a7dc9"> **multiplier**</span>. The observation is that if the remaining upper bits of the <span style="color:#3a7dc9"> **multiplier**</span> are all
+cycles of CSA compression, where each cycle `i` processes bits `8 * i` to `8 * i + 7` of the <span style="color:#468ee0"> **multiplier**</span>. The observation is that if the remaining upper bits of the <span style="color:#468ee0"> **multiplier**</span> are all
 zeros, then, we can skip that cycle, since the addends produced will be all zeros, which cannot possibly
 affect the values of the partial result + partial carry. We can do the same trick if the remaining upper bits
 are all ones (assuming we are performing a signed multiplication), as those also produce addends that
@@ -309,19 +309,19 @@ Didn't we just finish the section titled "Putting it all Together"? Why then is 
 Because I lied to you all. There's a small, but very meaningful difference between the algorithm I described and
 the ARM7TDMI's algorithm. Let's consider the following multiplication:
 $$
-\color{#3a7dc9}0x000000FF\color{#4A4358}  \cdot  \color{#DC6A76}0x00000001 \color{#4A4358}
+\color{#468ee0}0x000000FF\color{#b6abcb}  \cdot  \color{#e23e4b}0x00000001 \color{#b6abcb}
 $$
-How many cycles should this take? 1, right? Because the upper 24 bits of the <span style="color:#3a7dc9"> **multiplier**</span> are zeros, then the
+How many cycles should this take? 1, right? Because the upper 24 bits of the <span style="color:#468ee0"> **multiplier**</span> are zeros, then the
 second, third, and fourth cycles of addends will all be zeros... right?
 Right? 
 Well, that's how long it takes the ARM7TDMI to do it. So what's the issue? Let's take a closer look. The first cycle of the algorithm should have the following four chunks:
 
 $$
 \begin{aligned}
-&\text{Chunk #1: }\color{#3a7dc9}\text{0b110   (obtained from m[1..-1])}\cr
-&\text{Chunk #2: }\color{#3a7dc9}\text{0b111   (obtained from m[3..1])}\cr
-&\text{Chunk #3: }\color{#3a7dc9}\text{0b111   (obtained from m[5..3])}\cr
-&\text{Chunk #4: }\color{#3a7dc9}\text{0b111   (obtained from m[7..5])}\cr
+&\text{Chunk #1: }\color{#468ee0}\text{0b110   (obtained from m[1..-1])}\cr
+&\text{Chunk #2: }\color{#468ee0}\text{0b111   (obtained from m[3..1])}\cr
+&\text{Chunk #3: }\color{#468ee0}\text{0b111   (obtained from m[5..3])}\cr
+&\text{Chunk #4: }\color{#468ee0}\text{0b111   (obtained from m[7..5])}\cr
 \end{aligned}
 $$
 
@@ -329,10 +329,10 @@ Turns out, in our current version of the algorithm, the second cycle does have a
 
 $$
 \begin{aligned}
-&\text{Chunk #1: }\color{#3a7dc9}\text{0b001   (obtained from m[9..7])}\cr
-&\text{Chunk #2: }\color{#3a7dc9}\text{0b000   (obtained from m[11..9])}\cr
-&\text{Chunk #3: }\color{#3a7dc9}\text{0b000   (obtained from m[13..11])}\cr
-&\text{Chunk #4: }\color{#3a7dc9}\text{0b000   (obtained from m[15..13])}\cr
+&\text{Chunk #1: }\color{#468ee0}\text{0b001   (obtained from m[9..7])}\cr
+&\text{Chunk #2: }\color{#468ee0}\text{0b000   (obtained from m[11..9])}\cr
+&\text{Chunk #3: }\color{#468ee0}\text{0b000   (obtained from m[13..11])}\cr
+&\text{Chunk #4: }\color{#468ee0}\text{0b000   (obtained from m[15..13])}\cr
 \end{aligned}
 $$
 Because the LSB of Chunk #1 of Cycle #2 uses the MSB of Chunk #4 of Cycle #1, our algorithm would be forced to
@@ -369,9 +369,9 @@ put on <a href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&ur
 
 So fast forward about a year, I'm out for a walk and I decide to give this problem a thought again. And so I considered something that, at the outset, sounds really, really stupid.
 
-"What if we left shifted the  <span style="color:#3a7dc9"> **multiplier**</span> by 1 at the beginning of the algorithm?"
+"What if we left shifted the  <span style="color:#468ee0"> **multiplier**</span> by 1 at the beginning of the algorithm?"
 
-I mean, it's kind of dumb, right? The entire issue is that the <span style="color:#3a7dc9"> **multiplier**</span> is _too big_. Left shifting it would only exacerbate this issue. Congrats, we went from being able to process 7 bits on the first cycle to 6.
+I mean, it's kind of dumb, right? The entire issue is that the <span style="color:#468ee0"> **multiplier**</span> is _too big_. Left shifting it would only exacerbate this issue. Congrats, we went from being able to process 7 bits on the first cycle to 6.
 
 But pay attention to the **first addend** that would be produced. The corresponding **chunk** would either be `000` or `100`. Two options, both of which are really easy to compute. This is a behavior that would only exist on the first cycle of the algorithm. Coincidentally, if you refer to [the diagram](#diagram) up above, you'll notice that, in the first cycle of the algorithm, we have an extra input in the CSA array that we initialized to zero. What if, instead, we initialize it to the addend produced by this mythical **chunk**? Allowing us to process one additional bit on the first cycle only? <sup>[[5, p. 14](#cite5)]</sup>
 
@@ -379,7 +379,7 @@ It'd solve the issue. It'd get us the extra bit we needed, and make us match the
 
 But that's not all. Remember the carry flag from earlier? With this simple change, we go from matching hardware about 50% of the time (no better than randomly guessing) to matching hardware _**85%**_ of the time. This sudden increase was something no other theory was able to do, and made me really confident that I was on to something. However, this percentage only happens if we set the carry flag to bit `30` of the partial carry result, which seems super arbitrary. It turns out that bit of the partial carry result had a special meaning I did not realize at the time, and I would only find out that meaning much, much later.
 
-(Obviously, shifting the <span style="color:#3a7dc9"> **multiplier**</span> left by 1 means the result is now twice what it should be. This is handled later.)
+(Obviously, shifting the <span style="color:#468ee0"> **multiplier**</span> left by 1 means the result is now twice what it should be. This is handled later.)
 
 # Mathematical Black Magic
 
@@ -425,7 +425,7 @@ You can think of this trick conceptually as us initializing all 64-bits of `csa_
 
 Turns out this algorithm doesn't support signed multiplication yet either. To implement this, we need to take a closer look at the CSA.
 
-The CSA in its current form takes in 3 33-bit inputs, and outputs 2 33-bit outputs. One of these inputs, however, is actually supposed to be *34* bits (ha, lied to you all again). Specifically, `addends.m[i].recoded_output`. The recoded output is derived from a 32-bit <span style="color:#DC6A76"> **multiplicand**</span>, which, when [booth recoded](#finaleq), can be multiplied by at most `2`, giving it a size of 33 bits. However, because we can support both signed and unsigned multiplies, this value needs to be 34 bits - the extra bit, as mentioned earlier, allows us to choose to either zero-extend or sign-extend the number to handle both signed and unsigned multiplication elegantly.
+The CSA in its current form takes in 3 33-bit inputs, and outputs 2 33-bit outputs. One of these inputs, however, is actually supposed to be *34* bits (ha, lied to you all again). Specifically, `addends.m[i].recoded_output`. The recoded output is derived from a 32-bit <span style="color:#e23e4b"> **multiplicand**</span>, which, when [booth recoded](#finaleq), can be multiplied by at most `2`, giving it a size of 33 bits. However, because we can support both signed and unsigned multiplies, this value needs to be 34 bits - the extra bit, as mentioned earlier, allows us to choose to either zero-extend or sign-extend the number to handle both signed and unsigned multiplication elegantly.
 
 Let's take a look at the other two of the CSA's addends as well. `csa_output.carry`, a 33 bit number, also needs to be properly sign extended. However, `csa_output.output` does _not_ need to be sign extended, since `csa_output.output` is technically already a 65 bit number that was fully initialized with the acc.
 
@@ -552,7 +552,7 @@ bool should_terminate(u64 multiplier, enum MultiplicationFlavor flavor) {
 }
 ```
 
-Note that <span style="color:#3a7dc9"> **multiplier**</span> is a signed 33-bit number. After every cycle of booth's algorithm, the bottom eight bits are fed into a result register, since the _next_ cycle of booth's algorithm cannot change the value of those bottom eight bits. The remaining upper bits become the next input into the next cycle of booth's algorithm. Something like this:
+Note that <span style="color:#468ee0"> **multiplier**</span> is a signed 33-bit number. After every cycle of booth's algorithm, the bottom eight bits are fed into a result register, since the _next_ cycle of booth's algorithm cannot change the value of those bottom eight bits. The remaining upper bits become the next input into the next cycle of booth's algorithm. Something like this:
 
 
 ```c
